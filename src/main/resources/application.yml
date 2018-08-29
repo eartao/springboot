@@ -1,0 +1,19 @@
+spring:
+  thymeleaf:
+    cache: false
+    suffix: .html
+  datasource:
+    url: jdbc:mysql://47.104.143.33:3306/mysql?useUnicode=true&characterEncoding=gbk&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+
+server:
+  address: 127.0.0.1
+  port: 8080
+
+
+#mybatis:
+#  mapper-locations: classpath:com/example/demo/mapper/*.xml
+
+
