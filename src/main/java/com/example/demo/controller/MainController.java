@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.Market;
+import com.example.demo.domain.RestResponse;
 import com.example.demo.service.MarketService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +17,23 @@ import java.util.List;
 public class MainController {
     @Autowired
     private MarketService service;
-    @RequestMapping("getMarket")
+    @RequestMapping("getProductInfo")
     @ResponseBody
-    public List<Market> getMarket(){
-        System.out.println("进入方法");
-        List<Market> list = service.getMarket();
-        return list;
+    public RestResponse getMarket(@RequestParam(value = "name",required = false)String name){
+        if(StringUtils.isBlank(name)){
+            return RestResponse.fail("please input product name");
+        }
+        RestResponse response = service.getProductInfo(name);
+        return response;
     }
-    @RequestMapping("aa")
-    public String get(){
-        return "hello world java Nih dfadffa";
+    @RequestMapping("getPriceFromPage")
+    public RestResponse getPriceFromPage(@RequestParam(required = true,value = "url")String url,@RequestParam(value = "markets") List<String> markets){
+        if(StringUtils.isBlank(url)){
+            return RestResponse.fail("url cannt be null");
+        }
+        //RestResponse response = service.getPriceFromPage(url);
+        return null;
     }
+
 
 }

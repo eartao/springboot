@@ -23,37 +23,41 @@
             //id必须和页面上定义的ms-controller名字相同，否则无法控制页面
             $id: "viewmodel",
             datalist: {},
+            name: "dafdfdasfjkl",
             text: "请求数据",
             request: function () {
                 $.ajax({
                     type: "post",
-                    url: "/getMarket",    //向后端请求数据的url
+                    url: "/getProductInfo?name=a",    //向后端请求数据的url
                     data: {},
                     success: function (data) {
                         //$('button').removeClass("btn-primary").addClass("btn-success").attr('disabled', true);
-                        viewmodel.datalist = data;
+                        if(data.code==1){
+                            alert(data.message);
+                        }
+                        viewmodel.datalist = data.object;
                         viewmodel.text = "数据请求成功，已渲染";
                     }
                 });
             }
         });
     </script>
-    <script>
-            var vm = avalon.define({
-                $id: "test",
-                name: "",
-                request1: function (){
-                    $.ajax({
-                        type:"post",
-                        url:"/getMarket",
-                        success: function(data){
-                        alert(data[0].usd);
-                            vm.name=data[0].usd;
-                        }
-                    });
-                }
-            })
-    </script>
+    <!--<script>-->
+            <!--var vm = avalon.define({-->
+                <!--$id: "test",-->
+                <!--name: "",-->
+                <!--request1: function (){-->
+                    <!--$.ajax({-->
+                        <!--type:"post",-->
+                        <!--url:"/getMarket",-->
+                        <!--success: function(data){-->
+                        <!--alert(data.message);-->
+                            <!--vm.name=data[0].usd;-->
+                        <!--}-->
+                    <!--});-->
+                <!--}-->
+            <!--})-->
+    <!--</script>-->
 </head>
 
 <body ms-controller="viewmodel">
@@ -70,30 +74,24 @@
                 Price Check Tool
             </h2>
             <div class="btn-group">
-                <button class="btn btn-default">Action</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+                <button class="btn btn-default">Group</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="#">操作</a>
+                        <a href="#">Group1</a>
                     </li>
                     <li class="disabled">
-                        <a href="#">另一操作</a>
+                        <a href="#">Group2</a>
                     </li>
                     <li class="divider">
                     </li>
                     <li>
-                        <a href="#">其它</a>
+                        <a href="#">Group3</a>
                     </li>
                 </ul>
             </div>
             <form role="form" class="form-inline">
-                <div class="form-group"  ms-controller="test">
-                    <label>url address &nbsp;&nbsp;&nbsp;</label><input ms-duplex="@name"   type="url" class="form-control"  style="width: 350px"/>
-                    <button type="button" class="btn btn-default" ms-click="@request1">查看价格</button>
-                    <span>{{@name}}</span>
-                </div><br>
                 <div class="form-group" ms-controller="test">
-                    <label>product name</label><input type="text" class="form-control" style="width: 350px"/>
-                    <button type="submit"  class="btn btn-default">提交</button>
+                    <label>product name</label><input type="text" class="form-control" style="width: 350px"  />
                 </div>
 
             </form>
@@ -106,6 +104,7 @@
                 <thead>
                 <tr>
                     <td class="success"><font size="3"><strong>id</strong></font></td>
+                    <td class="success"><font size="3"><strong>name</strong></font></td>
                     <td class="success"><font size="3"><strong>usd</strong></font></td>
                     <td class="success"><font size="3"><strong>market</strong></font></td>
                     <td class="success"><font size="3"><strong>description</strong></font></td>
@@ -115,6 +114,7 @@
                 <tbody>
                 <tr ms-for="el in @datalist">
                     <td class="active">{{el.id}}</td>
+                    <td class="success">{{el.name}}</td>
                     <td class="success">{{el.usd}}</td>
                     <td class="warning">{{el.market}}</td>
                     <td class="danger">{{el.description}}</td>
@@ -145,6 +145,15 @@
                     <a href="#">Next</a>
                 </li>
             </ul>
+            <form role="form" class="form-inline">
+                <div class="form-group"  ms-controller="test">
+                    <label>url address &nbsp;&nbsp;&nbsp;</label><input ms-duplex="@name"   type="url" class="form-control"  style="width: 350px"/>
+                    <button type="button" class="btn btn-default" ms-click="@request1">查看价格dddd</button>
+                    <span>{{@name}}</span>
+                </div>
+            </form>
+
+
             <blockquote>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.

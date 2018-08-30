@@ -15,5 +15,3 @@ server:
 
 #mybatis:
 #  mapper-locations: classpath:com/example/demo/mapper/*.xml
-
-

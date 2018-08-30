@@ -1,7 +1,9 @@
-package com.example.demo.domain;
+package com.example.demo.generator.pojo;
 
 public class Market {
     private Integer id;
+
+    private String name;
 
     private String usd;
 
@@ -17,6 +19,14 @@ public class Market {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     public String getUsd() {

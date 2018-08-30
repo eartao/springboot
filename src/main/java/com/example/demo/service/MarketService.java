@@ -1,9 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.Market;
+import com.example.demo.domain.RestResponse;
 
 import java.util.List;
 
 public interface MarketService {
-    List<Market> getMarket();
+    RestResponse getProductInfo(String name);
 }

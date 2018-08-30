@@ -1,6 +1,6 @@
 package com.example.demo.mapper;
 
-import com.example.demo.domain.Market;
+import com.example.demo.generator.pojo.Market;
 
 import java.util.List;
 
@@ -17,5 +17,5 @@ public interface MarketMapper {
 
     int updateByPrimaryKey(Market record);
 
-    List<Market>  selectTotal();
+    List<Market> selectByName(String name);
 }
