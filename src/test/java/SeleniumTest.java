@@ -68,7 +68,7 @@ public class SeleniumTest {
         String salePrice = null;
         String listPrice = null;
         try {
-            driver.get("https://ar.test-godaddy.com/tlds/club-domain");
+            driver.get("https://test-godaddy.com/tlds/club-domain");
 //        WebDriverWait webDriverWait = new WebDriverWait(driver,10);
             String xpath = "//*[@class='text-purchase'] | //*[@class='text-light']";
             WebElement element = driver.findElement(By.xpath(xpath));
@@ -79,15 +79,18 @@ public class SeleniumTest {
         }
         WebElement element = null;
         try {
-            String xpath1 = "//*[@class='vsc-paragraph-child-block marquee-product-text child-section-']/div/div/p/span/span/span/strike";
-//        String xpath1 = "strike";
-            element = driver.findElement(By.xpath(xpath1));
+//            String xpath1 = "//*[@class='vsc-paragraph-child-block marquee-product-text child-section-']/div/div/p/span/span/span/strike";
+            String xpath1 = "strike";
+            element = driver.findElement(By.tagName(xpath1));
             listPrice = element.getText();
+            System.out.println("salePrice:"+salePrice+"listPrice:"+listPrice);
         } catch (Exception e) {
             System.out.println("获取不到listPrice");
             System.out.println("用时："+(System.currentTimeMillis()-l));
             driver.quit();
             System.out.println("listPrice:"+listPrice+"---salePrice:"+salePrice);
+        }finally {
+            driver.quit();
         }
     }
 }
