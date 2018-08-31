@@ -3,9 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <h1>呵呵dddddfasdfsddfadfasfsdfaerwrewq你好大的dfadfasdfdafd发地方大幅度打发第三方打发第三方付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付</h1>
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script>
+        function get(){
+        alert(2314);
+        alert($("#name").val());
+            var name = $("#name").val();
+            $.ajax({
+                url:"/getProductInfo",
+                type:"get",
+                data:{name:name},
+                success:function(data){
+                    alert("成功");
+                }
+            });
+        }
+
+    </script>
 </head>
 <body>
-
+<input type="text" name="product" id="name"/>
+<button onclick="get()">按钮</button>
 </body>
 </html>
