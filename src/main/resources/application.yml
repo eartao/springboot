@@ -3,7 +3,7 @@ spring:
     cache: false
     suffix: .html
   datasource:
-    url: jdbc:mysql://47.104.143.33:3306/mysql?useUnicode=true&characterEncoding=gbk&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://47.104.143.33:3306/eartao?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface MarketService {
     RestResponse getProductInfo(String name);
+
+    RestResponse getResult(String url,String markets,String  pfId);
 }

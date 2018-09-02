@@ -26,6 +26,19 @@ public class MainController {
         RestResponse response = service.getProductInfo(name);
         return response;
     }
+
+    @RequestMapping("getResult")
+    public RestResponse getResult(String url,String markets,String  pfId){
+        if(StringUtils.isBlank(url)){
+            return RestResponse.fail("url cannt be null");
+        }
+        if(StringUtils.isBlank(pfId)){
+            return RestResponse.fail("please choose a pfId");
+        }
+        RestResponse response = service.getResult(url,markets,pfId);
+        return response;
+    }
+
     @RequestMapping("getPriceFromPage")
     public RestResponse getPriceFromPage(@RequestParam(required = true,value = "url")String url,@RequestParam(value = "markets") List<String> markets){
         if(StringUtils.isBlank(url)){
