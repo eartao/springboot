@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,9 +15,21 @@
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <!--<link href="https://cdn.bootcss.com/avalon.js/2.0s/avalon.js" rel="stylesheet">-->
     <script src="https://cdn.bootcss.com/avalon.js/2.0s/avalon.js"></script>
-
-     <!--Bootstrap-->
+    <link rel="stylesheet" type="text/css" th:href="@{/color.css}">
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        var i =1;
+        function clickme(){
+            var mydiv = document.getElementById("mydiv");
+            if(i%2==1){
+                mydiv.style.display='block';
+            }
+            if(i%2==0){
+                mydiv.style.display='none';
+            }
+            i++;
+        }
+    </script>
     <script>
         var viewmodel = avalon.define({
             //id必须和页面上定义的ms-controller名字相同，否则无法控制页面
@@ -26,6 +38,10 @@
             datalist: {},
             // data: JSON.parse(JSON.stringify(vm.$viewmodel)),
             text: "请求数据",
+            color: function (obj){
+                alert($(this).index(obj));
+                // $('td').addClass("btn-success").attr('disabled', true);
+            },
             request: function () {
                 $.ajax({
                     type: "post",
@@ -54,6 +70,15 @@
                 $id: "result",
                 url: "",
                 datalist1: {},
+                click1: function(){
+                    $("#group1").removeAttr("hidden");
+                },
+                click2: function(){
+                    $("#group2").removeAttr("hidden");
+                },
+                click3: function(){
+                    $("#group3").removeAttr("hidden");
+                },
                 result: function (){
                     $.ajax({
                         type:"post",
@@ -113,7 +138,7 @@
                     </thead>
                     <tbody>
                     <tr ms-for="el in @datalist">
-                        <td class="danger"><input type="checkbox"/>{{el.pfId}}</td>
+                        <td class="danger" ms-click="@color(this)">{{el.pfId}}</td>
                         <td class="info">{{el.name}}</td>
                         <td class="info">{{el.description1}}</td>
                         <td class="info">{{el.description2}}</td>
@@ -144,27 +169,65 @@
                     <a href="#">Next</a>
                 </li>
             </ul>
-            <form role="form" class="form-inline">
+            <form role="form" class="form-inline"  ms-controller="result">
                 <div class="btn-group">
                     <button class="btn btn-default">Markets</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#">Group1</a>
+                            <!--<a href="#">Group1</a>-->
+                            <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click1">Group1</button>
                         </li>
                         <li class="divider">
                         </li>
                         <li>
-                            <a href="#">Group2</a>
+                            <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click2">Group1</button>
                         </li>
                         <li class="divider">
                         </li>
                         <li>
-                            <a href="#">Group3</a>
+                            <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click3">Group1</button>
                         </li>
                     </ul>
                 </div>
+                <div id="group1" hidden="hidden" class="col-md-12 column">
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <input id="color-input-red" class="chat-button-location-radio-input" type="checkbox" name="color-input-red"/>啊
+                        <label  for="color-input-red"></label >
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <input id="color-input-orange" class="chat-button-location-radio-input" type="checkbox" name="color-input-orange"/>是
+                        <label  for="color-input-orange"></label >
+                    </div>
+
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <input id="color-input-yellow" class="chat-button-location-radio-input" type="checkbox" name="color-input-yellow"/>的
+                        <label  for="color-input-yellow"></label >
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <input id="color-input-green" class="chat-button-location-radio-input" type="checkbox" name="color-input-green"/>发
+                        <label  for="color-input-green"></label >
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <input id="color-input-blue" class="chat-button-location-radio-input" type="checkbox" name="color-input-blue"/>个
+                        <label  for="color-input-blue"></label >
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <input id ="color-input-purple" class="chat-button-location-radio-input" type="checkbox" name="color-input-purple"/>好
+                        <label for="color-input-purple"></label>
+                    </div>
+                </div>
+                <div id="group2" hidden="hidden">
+                    <input type="checkbox"/>ddd
+                    <input type="checkbox"/>sss
+                    <input type="checkbox"/>ccc
+                </div>
+                <div id="group3" hidden="hidden">
+                    <input type="checkbox"/>你好
+                    <input type="checkbox"/>淡定
+                    <input type="checkbox"/>嗯嗯
+                </div>
                 <br>
-                <div class="col-md-12 column" ms-controller="result">
+                <div class="col-md-12 column">
                     <label>url address &nbsp;&nbsp;&nbsp;</label><input ms-duplex="@url"    type="url" class="form-control"  style="width: 350px"/>
                     <button type="button" class="btn btn-default" ms-click="@result">比较结果</button>
                     <table class="table table-striped">
