@@ -1,6 +1,6 @@
 package com.example.demo.generator.pojo;
 
-public class Product {
+public class CatalogProduct {
     private String pfId;
 
     private String gdshopProductTypeid;

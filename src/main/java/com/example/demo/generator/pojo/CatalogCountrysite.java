@@ -1,6 +1,6 @@
 package com.example.demo.generator.pojo;
 
-public class Countrysite {
+public class CatalogCountrysite {
     private String catalogCountrysite;
 
     private String catalogPricegroupid;
