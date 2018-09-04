@@ -14,7 +14,7 @@ public class Hello {
 
     @RequestMapping("index")
     public  String index(){
-        return "avalonJs";
+        return "index1";
     }
 
 }

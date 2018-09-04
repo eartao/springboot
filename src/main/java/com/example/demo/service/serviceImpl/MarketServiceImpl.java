@@ -8,6 +8,7 @@ import com.example.demo.mapper.CatalogProductMapper;
 import com.example.demo.mapper.CatalogProductprivatelabelpricesaleMapper;
 import com.example.demo.mapper.CatalogProductresellertypepriceMapper;
 import com.example.demo.service.MarketService;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -51,7 +52,12 @@ public class MarketServiceImpl implements MarketService {
     public RestResponse getResult(String url,String markets,String  pfId) {
         //String url = "https://test-godaddy.com/tlds/club-domain";
         StringBuffer sb = new StringBuffer();
-        String[] market = markets.split(",");
+        String[] market = {};
+        if(StringUtils.isBlank(markets)){
+            market = new String[]{"en-us"};
+        }else {
+            market = markets.split(",");
+        }
         List<ProductPrice> list = new ArrayList<>();
         List<Result> results = new ArrayList<>();
         Map<String,String> map = new HashMap<>();
@@ -72,6 +78,7 @@ public class MarketServiceImpl implements MarketService {
             if((null == sqlPrice && null == pagePrice) || (null != sqlPrice && null != pagePrice && sqlPrice.equals(pagePrice))){
                 continue;
             }
+            System.out.println(result.toString());
             results.add(result);
             }
         return RestResponse.fail("Failed Markets",results);
@@ -102,10 +109,9 @@ public class MarketServiceImpl implements MarketService {
             listPrice = element.getText();
             System.out.println("salePrice:"+salePrice+"listPrice:"+listPrice);
         } catch (Exception e) {
-            System.out.println("页面获取不到listPrice");
-            System.out.println("用时："+(System.currentTimeMillis()-l));
+            System.out.println("页面获取不到"+market+"的listPrice");
+            System.out.println(market+"用时："+(System.currentTimeMillis()-l));
             driver.quit();
-            System.out.println("listPrice:"+listPrice+"---salePrice:"+salePrice);
         }finally {
             price.setListPrice(listPrice);
             price.setSalePrice(salePrice);

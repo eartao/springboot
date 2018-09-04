@@ -15,37 +15,25 @@
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <!--<link href="https://cdn.bootcss.com/avalon.js/2.0s/avalon.js" rel="stylesheet">-->
     <script src="https://cdn.bootcss.com/avalon.js/2.0s/avalon.js"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{/color.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <script>
-        var i =1;
-        function clickme(){
-            var mydiv = document.getElementById("mydiv");
-            if(i%2==1){
-                mydiv.style.display='block';
-            }
-            if(i%2==0){
-                mydiv.style.display='none';
-            }
-            i++;
-        }
-    </script>
     <script>
         var viewmodel = avalon.define({
             //id必须和页面上定义的ms-controller名字相同，否则无法控制页面
             $id: "viewmodel",
             name:'',
+            c:"",
             datalist: {},
-            // data: JSON.parse(JSON.stringify(vm.$viewmodel)),
+            pfId:"",
             text: "请求数据",
-            color: function (obj){
-                alert($(this).index(obj));
-                // $('td').addClass("btn-success").attr('disabled', true);
+            trClick: function(obj){
+                viewmodel.pfId = obj.pfId;
+                alert("选择pfId:"+obj.pfId);
             },
             request: function () {
                 $.ajax({
                     type: "post",
-                    data: {name: 'form'},
+                    data: {name: viewmodel.name},
                     url: "/getProductInfo",
                     success: function (data) {
                         //$('button').removeClass("btn-primary").addClass("btn-success").attr('disabled', true);
@@ -79,10 +67,14 @@
                 click3: function(){
                     $("#group3").removeAttr("hidden");
                 },
+                market: [],
+                markets1:['ar-AE','en-AE','es-AR','fr-CA','de-CH','fr-CH','it-CH','es-CL','zh-Hans-CN','es-CO','cs-CZ','de-DE'],
+                markets2:['de-AT','en-AU','fr-BE','da-DK','ar-EG','en-EG','es-ES','fi-FI','fr-FR','el-GR','en-HK','hu-HU'],
+                markets3:['nl-BE','pt-BR','en-CA','en-ZA','en-US','vi-VN','es-VE','en-GB','uk-UA','zh-TW','tr-TR','en-GB'],
                 result: function (){
                     $.ajax({
                         type:"post",
-                        data: {url: vm.url,pfId:'5',markets:'es-AR,en-US'},
+                        data: {url: vm.url,pfId: viewmodel.pfId,markets:vm.market.toString()},
                         url:"/getResult",
                         success: function(data){
                         alert(data.message);
@@ -92,22 +84,17 @@
                 }
             })
     </script>
+
     <script>
-        function getPrice(){
-            var val = $("#name").val();
-            $.ajax({
-                type:"get",
-                url:"/getProductInfo",
-                data:{name:val},
-                success:function(data){
-                    alert(data);
-                }
-            });
-        }
+        var m = avalon.define({
+          $id:'app',
+          choices:[],
+          markets:['un-us','en-ua','de-de']
+        })
     </script>
 </head>
 
-<body>
+<body   ms-controller="result">
 <div class="container"><br/>
     <div class="alert alert-success">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
@@ -137,15 +124,17 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ms-for="el in @datalist">
-                        <td class="danger" ms-click="@color(this)">{{el.pfId}}</td>
+                    <tr ms-for="el in @datalist" ms-click="@trClick(el)">
+                        <td class="danger">{{el.pfId}}</td>
                         <td class="info">{{el.name}}</td>
                         <td class="info">{{el.description1}}</td>
                         <td class="info">{{el.description2}}</td>
                     </tr>
                     </tbody>
                 </table>
+                <p>pfId:{{@pfId}}</p>
             </div>
+
             <ul class="pagination">
                 <li>
                     <a href="#">Prev</a>
@@ -169,7 +158,7 @@
                     <a href="#">Next</a>
                 </li>
             </ul>
-            <form role="form" class="form-inline"  ms-controller="result">
+            <form role="form" class="form-inline">
                 <div class="btn-group">
                     <button class="btn btn-default">Markets</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
                     <ul class="dropdown-menu">
@@ -180,52 +169,53 @@
                         <li class="divider">
                         </li>
                         <li>
-                            <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click2">Group1</button>
+                            <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click2">Group2</button>
                         </li>
                         <li class="divider">
                         </li>
                         <li>
-                            <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click3">Group1</button>
+                            <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click3">Group3</button>
                         </li>
                     </ul>
                 </div>
+                <!--<div  >-->
+                    <!--<input ms-duplex="@market" type="checkbox"  id="4" class="awesome" value="us"/><label for="4">eb-us</label>-->
+                    <!--<input ms-duplex="@market" type="checkbox"  id="5" class="awesome" /><label for="5">en-ua</label>-->
+                    <!--<input ms-duplex="@market" type="checkbox"  id="6" class="awesome" /><label for="6">en-au</label>-->
+                    <!--<p>{{@market}}</p>-->
+                <!--</div>-->
                 <div id="group1" hidden="hidden" class="col-md-12 column">
-                    <div class="col-xs-2 col-sm-2 col-md-2">
-                        <input id="color-input-red" class="chat-button-location-radio-input" type="checkbox" name="color-input-red"/>啊
-                        <label  for="color-input-red"></label >
+                    <div>
+                        <label ms-for="el in @markets1">
+                            <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
+                        </label>
                     </div>
-                    <div class="col-xs-2 col-sm-2 col-md-2">
-                        <input id="color-input-orange" class="chat-button-location-radio-input" type="checkbox" name="color-input-orange"/>是
-                        <label  for="color-input-orange"></label >
-                    </div>
-
-                    <div class="col-xs-2 col-sm-2 col-md-2">
-                        <input id="color-input-yellow" class="chat-button-location-radio-input" type="checkbox" name="color-input-yellow"/>的
-                        <label  for="color-input-yellow"></label >
-                    </div>
-                    <div class="col-xs-2 col-sm-2 col-md-2">
-                        <input id="color-input-green" class="chat-button-location-radio-input" type="checkbox" name="color-input-green"/>发
-                        <label  for="color-input-green"></label >
-                    </div>
-                    <div class="col-xs-2 col-sm-2 col-md-2">
-                        <input id="color-input-blue" class="chat-button-location-radio-input" type="checkbox" name="color-input-blue"/>个
-                        <label  for="color-input-blue"></label >
-                    </div>
-                    <div class="col-xs-2 col-sm-2 col-md-2">
-                        <input id ="color-input-purple" class="chat-button-location-radio-input" type="checkbox" name="color-input-purple"/>好
-                        <label for="color-input-purple"></label>
-                    </div>
+                    <br>
                 </div>
-                <div id="group2" hidden="hidden">
-                    <input type="checkbox"/>ddd
-                    <input type="checkbox"/>sss
-                    <input type="checkbox"/>ccc
+                <div id="group2" hidden="hidden" class="col-md-12 column">
+                    <div>
+                        <label ms-for="el in @markets2">
+                            <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
+                        </label>
+                    </div>
+                    <br>
                 </div>
-                <div id="group3" hidden="hidden">
-                    <input type="checkbox"/>你好
-                    <input type="checkbox"/>淡定
-                    <input type="checkbox"/>嗯嗯
+                <div id="group3" hidden="hidden" class="col-md-12 column">
+                    <div>
+                        <label ms-for="el in @markets3">
+                            <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
+                        </label>
+                    </div>
+                    <br>
                 </div>
+                <p>market：
+                    {{@market}}
+                </p>
+                <!--<div id="group3" hidden="hidden" class="col-md-12 column">-->
+                    <!--<input ms-duplex="@market" type="checkbox" checked="checked" id="7" class="awesome"/><label for="7">eb-us</label>-->
+                    <!--<input ms-duplex="@market" type="checkbox" checked="checked" id="8" class="awesome"/><label for="8">en-ua</label>-->
+                    <!--<input ms-duplex="@market" type="checkbox" checked="checked" id="9" class="awesome"/><label for="9">en-au</label>-->
+                <!--</div>-->
                 <br>
                 <div class="col-md-12 column">
                     <label>url address &nbsp;&nbsp;&nbsp;</label><input ms-duplex="@url"    type="url" class="form-control"  style="width: 350px"/>
