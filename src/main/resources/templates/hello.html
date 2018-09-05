@@ -57,6 +57,7 @@
             var vm = avalon.define({
                 $id: "result",
                 url: "",
+                resultButton: "比较结果",
                 datalist1: {},
                 click1: function(){
                     $("#group1").removeAttr("hidden");
@@ -77,6 +78,7 @@
                         data: {url: vm.url,pfId: viewmodel.pfId,markets:vm.market.toString()},
                         url:"/getResult",
                         success: function(data){
+                        $(".table table-striped").attr("hidden", "hidden");
                         alert(data.message);
                         vm.datalist1 = data.object;
                         }
@@ -95,25 +97,96 @@
 </head>
 
 <body   ms-controller="result">
-<div class="container"><br/>
-    <div class="alert alert-success">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-        Hello, <strong>tao!</strong>
-    </div>
-</div>
+<!--<div class="container"><br/>-->
+    <!--<div class="alert alert-success">-->
+        <!--<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>-->
+        <!--Hello, <strong>tao!</strong>-->
+    <!--</div>-->
+<!--</div>-->
 <div class="container">
     <div class="row clearfix">
         <div class="col-md-12 column">
             <h2 class="text-center text-success">
                 Price Check Tool
             </h2>
-            <div class="progress">
-                <div class="progress-bar progress-success">
+            <!--<div class="progress">-->
+                <!--<div class="progress-bar progress-success">-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="btn-group">
+                <button class="btn btn-default">Markets</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <!--<a href="#">Group1</a>-->
+                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click1">Group1</button>
+                    </li>
+                    <li class="divider">
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click2">Group2</button>
+                    </li>
+                    <li class="divider">
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click3">Group3</button>
+                    </li>
+                </ul>
+            </div>
+            <!--<div  >-->
+            <!--<input ms-duplex="@market" type="checkbox"  id="4" class="awesome" value="us"/><label for="4">eb-us</label>-->
+            <!--<input ms-duplex="@market" type="checkbox"  id="5" class="awesome" /><label for="5">en-ua</label>-->
+            <!--<input ms-duplex="@market" type="checkbox"  id="6" class="awesome" /><label for="6">en-au</label>-->
+            <!--<p>{{@market}}</p>-->
+            <!--</div>-->
+            <div id="group1" hidden="hidden" class="col-md-12 column">
+                <div>
+                    <label ms-for="el in @markets1">
+                        <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
+                    </label>
                 </div>
+                <br>
+            </div>
+            <div id="group2" hidden="hidden" class="col-md-12 column">
+                <div>
+                    <label ms-for="el in @markets2">
+                        <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
+                    </label>
+                </div>
+                <br>
+            </div>
+            <div id="group3" hidden="hidden" class="col-md-12 column">
+                <div>
+                    <label ms-for="el in @markets3">
+                        <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
+                    </label>
+                </div>
+                <br>
             </div>
             <div ms-controller="viewmodel">
-                <label>product name</label><input ms-duplex="@name" type="text"  class="form-control" style="width: 350px"  />
-                <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@request">{{@text}}</button>
+                <form role="form" class="form-inline">
+                    <div>
+                        <label>product name&nbsp;</label>
+                        <input ms-duplex="@name" type="text"  class="form-control" style="width: 425px"/>
+                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@request">{{@text}}</button>
+                    </div>
+                    <div>
+                        <label>url address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input ms-duplex="@url"    type="url" class="form-control"  style="width: 425px"/>
+                        <!--<button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@result">{{@resultButton}}</button>-->
+                    </div>
+                    <div>
+                        <label>saleXpath&nbsp;</label>
+                        <input ms-duplex="@url"    type="url" class="form-control"  style="width: 450px"/>
+
+                        <label>listXpath</label>
+                        <input ms-duplex="@url"    type="url" class="form-control"  style="width: 450px"/>
+                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@result">{{@resultButton}}</button>
+                    </div>
+                    <div>
+                        <h3 style="color:red">pfId:{{@pfId}}   market：{{@market}}</h3>
+                    </div>
+                </form>
+
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -132,7 +205,7 @@
                     </tr>
                     </tbody>
                 </table>
-                <p>pfId:{{@pfId}}</p>
+
             </div>
 
             <ul class="pagination">
@@ -159,67 +232,7 @@
                 </li>
             </ul>
             <form role="form" class="form-inline">
-                <div class="btn-group">
-                    <button class="btn btn-default">Markets</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <!--<a href="#">Group1</a>-->
-                            <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click1">Group1</button>
-                        </li>
-                        <li class="divider">
-                        </li>
-                        <li>
-                            <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click2">Group2</button>
-                        </li>
-                        <li class="divider">
-                        </li>
-                        <li>
-                            <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click3">Group3</button>
-                        </li>
-                    </ul>
-                </div>
-                <!--<div  >-->
-                    <!--<input ms-duplex="@market" type="checkbox"  id="4" class="awesome" value="us"/><label for="4">eb-us</label>-->
-                    <!--<input ms-duplex="@market" type="checkbox"  id="5" class="awesome" /><label for="5">en-ua</label>-->
-                    <!--<input ms-duplex="@market" type="checkbox"  id="6" class="awesome" /><label for="6">en-au</label>-->
-                    <!--<p>{{@market}}</p>-->
-                <!--</div>-->
-                <div id="group1" hidden="hidden" class="col-md-12 column">
-                    <div>
-                        <label ms-for="el in @markets1">
-                            <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
-                        </label>
-                    </div>
-                    <br>
-                </div>
-                <div id="group2" hidden="hidden" class="col-md-12 column">
-                    <div>
-                        <label ms-for="el in @markets2">
-                            <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
-                        </label>
-                    </div>
-                    <br>
-                </div>
-                <div id="group3" hidden="hidden" class="col-md-12 column">
-                    <div>
-                        <label ms-for="el in @markets3">
-                            <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
-                        </label>
-                    </div>
-                    <br>
-                </div>
-                <p>market：
-                    {{@market}}
-                </p>
-                <!--<div id="group3" hidden="hidden" class="col-md-12 column">-->
-                    <!--<input ms-duplex="@market" type="checkbox" checked="checked" id="7" class="awesome"/><label for="7">eb-us</label>-->
-                    <!--<input ms-duplex="@market" type="checkbox" checked="checked" id="8" class="awesome"/><label for="8">en-ua</label>-->
-                    <!--<input ms-duplex="@market" type="checkbox" checked="checked" id="9" class="awesome"/><label for="9">en-au</label>-->
-                <!--</div>-->
-                <br>
                 <div class="col-md-12 column">
-                    <label>url address &nbsp;&nbsp;&nbsp;</label><input ms-duplex="@url"    type="url" class="form-control"  style="width: 350px"/>
-                    <button type="button" class="btn btn-default" ms-click="@result">比较结果</button>
                     <table class="table table-striped">
                         <thead>
                         <tr>

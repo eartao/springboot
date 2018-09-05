@@ -43,9 +43,60 @@ public class MarketServiceImpl implements MarketService {
 
     public static void main(String[] args) {
         String url = "https://godaddy.com/tlds/club-domain";
-        String market = "es-CL";
-        System.out.println(url.substring(0,8)+market.substring(3).toLowerCase()+"."+url.substring(8));
-        System.out.println(market.toLowerCase());
+        System.out.println(getUrl(url,"es-us"));
+        System.out.println(url.substring(url.indexOf(".com")+4));
+        System.out.println(String.format(url,"www"));
+        String market = "en-gb";
+        System.out.println(market.substring(3)+market.substring(0,2));
+        System.out.println("======"+getUrl(url,market));
+//        System.out.println(url.substring(0,8)+market.substring(3).toLowerCase()+"."+url.substring(8));
+//        System.out.println(market.toLowerCase());
+//        String money = "$money$ 5.   6大健康1,4  fdsaf2*/añomeiy你好uan";
+//        char[] chars = money.toCharArray();
+//        String result = "";
+//        for (int i = 0; i < chars.length; i++) {
+//            if (("0123456789.,").indexOf(chars[i] + "") != -1)
+//            {
+//                result += chars[i];
+//            }
+//        }
+//        System.out.println(result);
+    }
+
+    private static String getUrl(String url, String  market) {
+        market = market.replace("_","-");
+        String[] text = market.split("-");
+        if (market.equalsIgnoreCase("en-us")){
+            url = url.substring(0,8)+"www."+url.substring(8);
+        }
+        else if (market.equalsIgnoreCase( "en-gb"))
+        {
+            url = url.substring(0,8)+"uk."+url.substring(8);
+        }
+        else if (market.equalsIgnoreCase("es-us"))
+        {
+            url = url.substring(0,8)+"www."+url.substring(8);
+            url = url.replace(".com/",".com/"+text[0]+"/");
+        }
+        else {
+            url = url.substring(0,8)+market.substring(3).toLowerCase()+"."+url.substring(8);
+        }
+    return url;
+    }
+
+    public  String getMoney(String str){
+        if(StringUtils.isBlank(str)){
+            return null;
+        }
+        char[] chars = str.toCharArray();
+        String money = "";
+        for (int i = 0; i < chars.length; i++) {
+            if (("0123456789.,").indexOf(chars[i] + "") != -1)
+            {
+                money += chars[i];
+            }
+        }
+        return money;
     }
 
     @Override
@@ -65,7 +116,7 @@ public class MarketServiceImpl implements MarketService {
             Result result = new Result();
             ProductPrice pagePrice = new ProductPrice();
             ProductPrice sqlPrice = new ProductPrice();
-            String useUrl = url.substring(0,8)+market[i].substring(3).toLowerCase()+"."+url.substring(8);
+            String useUrl = getUrl(url,market[i]);
             map.put("market",market[i]);
             map.put("pfId",pfId);
             result.setMarket(market[i]);
@@ -73,8 +124,8 @@ public class MarketServiceImpl implements MarketService {
             result.setSqlSalePrice(null == sqlPrice ? null : sqlPrice.getSalePrice());
             result.setSqlListPrice(null == sqlPrice ? null : sqlPrice.getListPrice());
             pagePrice = getPagePrice(market[i],useUrl);
-            result.setPageSalePrice(null == pagePrice ? null : pagePrice.getSalePrice());
-            result.setPageListPrice(null == pagePrice ? null : pagePrice.getListPrice());
+            result.setPageSalePrice(null == pagePrice ? null : getMoney(pagePrice.getSalePrice()));
+            result.setPageListPrice(null == pagePrice ? null : getMoney(pagePrice.getListPrice()));
             if((null == sqlPrice && null == pagePrice) || (null != sqlPrice && null != pagePrice && sqlPrice.equals(pagePrice))){
                 continue;
             }
