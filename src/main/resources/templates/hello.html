@@ -17,6 +17,8 @@
     <script src="https://cdn.bootcss.com/avalon.js/2.0s/avalon.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/window.css}">
+    <script src="/window.js"></script>
     <script>
         var viewmodel = avalon.define({
             //id必须和页面上定义的ms-controller名字相同，否则无法控制页面
@@ -28,7 +30,7 @@
             text: "请求数据",
             trClick: function(obj){
                 viewmodel.pfId = obj.pfId;
-                alert("选择pfId:"+obj.pfId);
+                $("#h3").removeAttr("hidden");
             },
             request: function () {
                 $.ajax({
@@ -36,15 +38,21 @@
                     data: {name: viewmodel.name},
                     url: "/getProductInfo",
                     success: function (data) {
-                        //$('button').removeClass("btn-primary").addClass("btn-success").attr('disabled', true);
+                        $('.btn-primary').removeClass("btn-primary").addClass("btn-success");
                         if(data.code==1){
-                            alert(data.message);
+                            win.confirm("",data.message);
+                            // alert(data.message);
                             return;
                         }
                         if(data.object.length==0){
                             viewmodel.text = "暂无数据";
+                            // style="display: none"
+                            $("#table1").attr("style","display: none");
+                            viewmodel.datalist = data.object;
                             return;
                         }
+                            $("#table1").removeAttr("style");
+                            $("#table1").removeAttr("hidden");
                             viewmodel.datalist = data.object;
                             viewmodel.text = "数据请求成功，已渲染";
 
@@ -68,6 +76,8 @@
                 click3: function(){
                     $("#group3").removeAttr("hidden");
                 },
+                listXpath: "",
+                saleXpath: "",
                 market: [],
                 markets1:['ar-AE','en-AE','es-AR','fr-CA','de-CH','fr-CH','it-CH','es-CL','zh-Hans-CN','es-CO','cs-CZ','de-DE'],
                 markets2:['de-AT','en-AU','fr-BE','da-DK','ar-EG','en-EG','es-ES','fi-FI','fr-FR','el-GR','en-HK','hu-HU'],
@@ -75,12 +85,16 @@
                 result: function (){
                     $.ajax({
                         type:"post",
-                        data: {url: vm.url,pfId: viewmodel.pfId,markets:vm.market.toString()},
+                        data: {url: vm.url,pfId: viewmodel.pfId,markets:vm.market.toString(),listXpath:vm.listXpath,saleXpath:vm.saleXpath},
                         url:"/getResult",
                         success: function(data){
-                        $(".table table-striped").attr("hidden", "hidden");
-                        alert(data.message);
-                        vm.datalist1 = data.object;
+                            if(data.code == 1){
+                                alert(data.message);
+                            } else {
+                                $("#table1").attr("hidden", "hidden");
+                                $("#table2").removeAttr("hidden");
+                                vm.datalist1 = data.object;
+                            }
                         }
                     });
                 }
@@ -176,18 +190,19 @@
                     </div>
                     <div>
                         <label>saleXpath&nbsp;</label>
-                        <input ms-duplex="@url"    type="url" class="form-control"  style="width: 450px"/>
-
-                        <label>listXpath</label>
-                        <input ms-duplex="@url"    type="url" class="form-control"  style="width: 450px"/>
-                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@result">{{@resultButton}}</button>
+                        <input ms-duplex="@saleXpath"    type="url" class="form-control"  style="width: 450px"/>
                     </div>
                     <div>
-                        <h3 style="color:red">pfId:{{@pfId}}   market：{{@market}}</h3>
+                        <label>listXpath</label>
+                        <input ms-duplex="@listXpath"    type="url" class="form-control"  style="width: 450px"/>
+                        <button type="button" class="btn btn-success" style="margin: 10px;" ms-click="@result">{{@resultButton}}</button>
+                    </div>
+                    <div>
+                        <h2 style="color:red" hidden="hidden" id="h3">pfId:{{@pfId}}   market：{{@market}}</h2>
                     </div>
                 </form>
 
-                <table class="table table-striped">
+                <table class="table table-striped" id="table1" hidden="hidden">
                     <thead>
                     <tr>
                         <td class="danger"><font size="3"><strong>pfId</strong></font></td>
@@ -208,32 +223,32 @@
 
             </div>
 
-            <ul class="pagination">
-                <li>
-                    <a href="#">Prev</a>
-                </li>
-                <li>
-                    <a href="#">1</a>
-                </li>
-                <li>
-                    <a href="#">2</a>
-                </li>
-                <li>
-                    <a href="#">3</a>
-                </li>
-                <li>
-                    <a href="#">4</a>
-                </li>
-                <li>
-                    <a href="#">5</a>
-                </li>
-                <li>
-                    <a href="#">Next</a>
-                </li>
-            </ul>
+            <!--<ul class="pagination">-->
+                <!--<li>-->
+                    <!--<a href="#">Prev</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="#">1</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="#">2</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="#">3</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="#">4</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="#">5</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="#">Next</a>-->
+                <!--</li>-->
+            <!--</ul>-->
             <form role="form" class="form-inline">
                 <div class="col-md-12 column">
-                    <table class="table table-striped">
+                    <table class="table table-striped" id="table2" hidden="hidden">
                         <thead>
                         <tr>
                             <td class="danger"><font size="3"><strong>Fail market</strong></font></td>

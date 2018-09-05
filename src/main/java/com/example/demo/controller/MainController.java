@@ -28,14 +28,17 @@ public class MainController {
     }
 
     @RequestMapping("getResult")
-    public RestResponse getResult(String url,String markets,String  pfId){
+    public RestResponse getResult(String url,String markets,String  pfId,String listXpath,String saleXpath){
         if(StringUtils.isBlank(url)){
             return RestResponse.fail("url cannt be null");
+        }
+        if(!url.contains("http")){
+            return RestResponse.fail("pls input correct url like this-->z`https://godaddy.com");
         }
         if(StringUtils.isBlank(pfId)){
             return RestResponse.fail("please choose a pfId");
         }
-        RestResponse response = service.getResult(url,markets,pfId);
+        RestResponse response = service.getResult(url,markets,pfId,listXpath,saleXpath);
         return response;
     }
 

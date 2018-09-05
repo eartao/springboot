@@ -100,42 +100,56 @@ public class MarketServiceImpl implements MarketService {
     }
 
     @Override
-    public RestResponse getResult(String url,String markets,String  pfId) {
+    public RestResponse getResult(String url,String markets,String  pfId,String listXpath,String saleXpath) {
         //String url = "https://test-godaddy.com/tlds/club-domain";
-        StringBuffer sb = new StringBuffer();
-        String[] market = {};
-        if(StringUtils.isBlank(markets)){
-            market = new String[]{"en-us"};
-        }else {
-            market = markets.split(",");
+        try {
+            StringBuffer sb = new StringBuffer();
+            String[] market = {};
+            if(StringUtils.isBlank(markets)){
+                market = new String[]{"en-us"};
+            }else {
+                market = markets.split(",");
+            }
+            List<ProductPrice> list = new ArrayList<>();
+            List<Result> results = new ArrayList<>();
+            Map<String,String> map = new HashMap<>();
+            for (int i = 0; i < market.length; i++) {
+                Result result = new Result();
+                ProductPrice pagePrice = new ProductPrice();
+                ProductPrice sqlPrice = new ProductPrice();
+                String useUrl = getUrl(url,market[i]);
+                result.setMarket(market[i]);
+
+                pagePrice = getPagePrice(market[i],useUrl,listXpath,saleXpath);
+                if(StringUtils.isBlank(pagePrice.getSalePrice())){
+                    result.setPageSalePrice("No Price");
+                    results.add(result);
+                    continue;
+                }
+                result.setPageSalePrice(null == pagePrice ? null : getMoney(pagePrice.getSalePrice()));
+                result.setPageListPrice(null == pagePrice ? null : getMoney(pagePrice.getListPrice()));
+
+                map.put("market",market[i]);
+                map.put("pfId",pfId);
+                sqlPrice = saleMapper.getPriceFromSql(map);
+                result.setSqlSalePrice(null == sqlPrice ? null : sqlPrice.getSalePrice());
+                result.setSqlListPrice(null == sqlPrice ? null : sqlPrice.getListPrice());
+
+
+                if(null != sqlPrice && sqlPrice.equals(pagePrice)){
+                    continue;
+                }
+                System.out.println(result.toString());
+                results.add(result);
+            }
+            return RestResponse.success(results);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return RestResponse.fail("系统异常，请联系管理员");
         }
-        List<ProductPrice> list = new ArrayList<>();
-        List<Result> results = new ArrayList<>();
-        Map<String,String> map = new HashMap<>();
-        for (int i = 0; i < market.length; i++) {
-            Result result = new Result();
-            ProductPrice pagePrice = new ProductPrice();
-            ProductPrice sqlPrice = new ProductPrice();
-            String useUrl = getUrl(url,market[i]);
-            map.put("market",market[i]);
-            map.put("pfId",pfId);
-            result.setMarket(market[i]);
-            sqlPrice = saleMapper.getPriceFromSql(map);
-            result.setSqlSalePrice(null == sqlPrice ? null : sqlPrice.getSalePrice());
-            result.setSqlListPrice(null == sqlPrice ? null : sqlPrice.getListPrice());
-            pagePrice = getPagePrice(market[i],useUrl);
-            result.setPageSalePrice(null == pagePrice ? null : getMoney(pagePrice.getSalePrice()));
-            result.setPageListPrice(null == pagePrice ? null : getMoney(pagePrice.getListPrice()));
-            if((null == sqlPrice && null == pagePrice) || (null != sqlPrice && null != pagePrice && sqlPrice.equals(pagePrice))){
-                continue;
-            }
-            System.out.println(result.toString());
-            results.add(result);
-            }
-        return RestResponse.fail("Failed Markets",results);
     }
 
-    public ProductPrice getPagePrice(String market,String url){
+    public ProductPrice getPagePrice(String market,String url,String listXpath,String saleXpath){
         ProductPrice price = new ProductPrice();
         long l = System.currentTimeMillis();
         System.setProperty("webdriver.chrome.driver","D:\\Driver\\chromedriver.exe");
@@ -145,6 +159,11 @@ public class MarketServiceImpl implements MarketService {
         String listPrice = null;
         try {
             driver.get(url);
+            if(StringUtils.isNoneBlank(saleXpath) || StringUtils.isNotBlank(listXpath)){
+                salePrice = driver.findElement(By.xpath(saleXpath)).getText();
+                listPrice = driver.findElement(By.xpath(listXpath)).getText();
+                return price;
+            }
             String xpath = "//*[@class='text-purchase'] | //*[@class='text-light']";
             WebElement element = driver.findElement(By.xpath(xpath));
             salePrice = element.getText();
