@@ -170,7 +170,7 @@ public class MarketServiceImpl implements MarketService {
     public ProductPrice getPagePrice(String market,String url,String listXpath,String saleXpath){
         ProductPrice price = new ProductPrice();
         long l = System.currentTimeMillis();
-        System.setProperty("webdriver.chrome.driver","D:\\Driver\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver","C:\\Driver\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.manage().deleteAllCookies();
         String salePrice = null;

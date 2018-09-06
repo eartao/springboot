@@ -5,7 +5,7 @@ spring:
     cache: false
     suffix: .html
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/eartao?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://47.104.143.33:3306/eartao?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
@@ -16,3 +16,4 @@ server:
 
 #mybatis:
 #  mapper-locations: classpath:com/example/demo/mapper/*.xml
+#java -jar demo-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
