@@ -6,11 +6,11 @@ spring:
     suffix: .html
   datasource:
        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-#       driver-class-name: com.microsoft.jdbc.sqlserver.SQLServerDriver
        url: jdbc:sqlserver://P3TWSQL02\PSQL;Databasename=gdMasterCatalog
-       integratedSecurity: false
-       username: JOMAX\bzhang
+       integratedSecurity: true
+
+
+#       username: JOMAX\bzhang
 #       password: password
-#java -jar demo-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 server:
   port: 8080
