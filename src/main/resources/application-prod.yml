@@ -9,7 +9,7 @@ spring:
 #       driver-class-name: com.microsoft.jdbc.sqlserver.SQLServerDriver
        url: jdbc:sqlserver://P3TWSQL02\PSQL;Databasename=gdMasterCatalog
        integratedSecurity: false
-#       username: sa
+       username: JOMAX\bzhang
 #       password: password
 #java -jar demo-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 server:
