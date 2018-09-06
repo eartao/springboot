@@ -40,7 +40,7 @@
                     success: function (data) {
                         $('.btn-primary').removeClass("btn-primary").addClass("btn-success");
                         if(data.code==1){
-                            win.confirm("",data.message);
+                            win.alert("",data.message);
                             // alert(data.message);
                             return;
                         }
@@ -64,7 +64,7 @@
     <script>
             var vm = avalon.define({
                 $id: "result",
-                url: "",
+                url: "https://godaddy.com/",
                 resultButton: "比较结果",
                 datalist1: {},
                 click1: function(){
@@ -79,7 +79,7 @@
                 listXpath: "",
                 saleXpath: "",
                 market: [],
-                markets1:['ar-AE','en-AE','es-AR','fr-CA','de-CH','fr-CH','it-CH','es-CL','zh-Hans-CN','es-CO','cs-CZ','de-DE'],
+                markets1:['en-US','en-AE','es-AR','fr-CA','de-CH','fr-CH','it-CH','es-CL','zh-Hans-CN','es-CO','cs-CZ','de-DE'],
                 markets2:['de-AT','en-AU','fr-BE','da-DK','ar-EG','en-EG','es-ES','fi-FI','fr-FR','el-GR','en-HK','hu-HU'],
                 markets3:['nl-BE','pt-BR','en-CA','en-ZA','en-US','vi-VN','es-VE','en-GB','uk-UA','zh-TW','tr-TR','en-GB'],
                 result: function (){
@@ -89,7 +89,7 @@
                         url:"/getResult",
                         success: function(data){
                             if(data.code == 1){
-                                alert(data.message);
+                                win.alert("",data.message);
                             } else {
                                 $("#table1").attr("hidden", "hidden");
                                 $("#table2").removeAttr("hidden");
@@ -190,11 +190,11 @@
                     </div>
                     <div>
                         <label>saleXpath&nbsp;</label>
-                        <input ms-duplex="@saleXpath"    type="url" class="form-control"  style="width: 450px"/>
+                        <input ms-duplex="@saleXpath"    type="url" class="form-control"  style="width: 750px"/>
                     </div>
                     <div>
-                        <label>listXpath</label>
-                        <input ms-duplex="@listXpath"    type="url" class="form-control"  style="width: 450px"/>
+                        <label>listXpath&nbsp;&nbsp;</label>
+                        <input ms-duplex="@listXpath"    type="url" class="form-control"  style="width: 750px"/>
                         <button type="button" class="btn btn-success" style="margin: 10px;" ms-click="@result">{{@resultButton}}</button>
                     </div>
                     <div>

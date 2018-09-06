@@ -66,22 +66,34 @@ public class MarketServiceImpl implements MarketService {
     private static String getUrl(String url, String  market) {
         market = market.replace("_","-");
         String[] text = market.split("-");
-        if (market.equalsIgnoreCase("en-us")){
-            url = url.substring(0,8)+"www."+url.substring(8);
+        if(url.contains("www")){
+            if(market.equalsIgnoreCase("en-gb")){
+                url = url.replace("www","hk");
+            } else if (market.equalsIgnoreCase("es-us")) {
+                url = url.replace("com/","com/"+text[0]+"/");
+            } else if (market.equalsIgnoreCase("en-us")){
+
+            } else {
+                url = url.replace("www",text[1]);
+            }
+        } else {
+            if (market.equalsIgnoreCase("en-us")){
+                url = url.substring(0,8)+"www."+url.substring(8);
+            }
+            else if (market.equalsIgnoreCase( "en-gb"))
+            {
+                url = url.substring(0,8)+"uk."+url.substring(8);
+            }
+            else if (market.equalsIgnoreCase("es-us"))
+            {
+                url = url.substring(0,8)+"www."+url.substring(8);
+                url = url.replace(".com/",".com/"+text[0]+"/");
+            }
+            else {
+                url = url.substring(0,8)+market.substring(3).toLowerCase()+"."+url.substring(8);
+            }
         }
-        else if (market.equalsIgnoreCase( "en-gb"))
-        {
-            url = url.substring(0,8)+"uk."+url.substring(8);
-        }
-        else if (market.equalsIgnoreCase("es-us"))
-        {
-            url = url.substring(0,8)+"www."+url.substring(8);
-            url = url.replace(".com/",".com/"+text[0]+"/");
-        }
-        else {
-            url = url.substring(0,8)+market.substring(3).toLowerCase()+"."+url.substring(8);
-        }
-    return url;
+        return url;
     }
 
     public  String getMoney(String str){
@@ -94,6 +106,9 @@ public class MarketServiceImpl implements MarketService {
             if (("0123456789.,").indexOf(chars[i] + "") != -1)
             {
                 money += chars[i];
+            }
+            if (("/").indexOf(chars[i] + "") != -1){
+                return money;
             }
         }
         return money;
@@ -121,6 +136,7 @@ public class MarketServiceImpl implements MarketService {
                 result.setMarket(market[i]);
 
                 pagePrice = getPagePrice(market[i],useUrl,listXpath,saleXpath);
+                System.out.println("============="+pagePrice);
                 if(StringUtils.isBlank(pagePrice.getSalePrice())){
                     result.setPageSalePrice("No Price");
                     results.add(result);
@@ -132,6 +148,8 @@ public class MarketServiceImpl implements MarketService {
                 map.put("market",market[i]);
                 map.put("pfId",pfId);
                 sqlPrice = saleMapper.getPriceFromSql(map);
+                System.out.println("============="+sqlPrice);
+                System.out.println(pagePrice.equals(sqlPrice));
                 result.setSqlSalePrice(null == sqlPrice ? null : sqlPrice.getSalePrice());
                 result.setSqlListPrice(null == sqlPrice ? null : sqlPrice.getListPrice());
 
@@ -159,17 +177,23 @@ public class MarketServiceImpl implements MarketService {
         String listPrice = null;
         try {
             driver.get(url);
-            if(StringUtils.isNoneBlank(saleXpath) || StringUtils.isNotBlank(listXpath)){
+            if(StringUtils.isNotBlank(saleXpath) || StringUtils.isNotBlank(listXpath)){
                 salePrice = driver.findElement(By.xpath(saleXpath)).getText();
                 listPrice = driver.findElement(By.xpath(listXpath)).getText();
+                price.setListPrice(listPrice);
+                price.setSalePrice(salePrice);
+                price.setMarket(market);
+                driver.quit();
                 return price;
             }
             String xpath = "//*[@class='text-purchase'] | //*[@class='text-light']";
             WebElement element = driver.findElement(By.xpath(xpath));
             salePrice = element.getText();
         } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("xpath获取不到"+market+"的Price");
             driver.quit();
-            //return  RestResponse.fail("this url can not get the price info,please check");
+            return price;
         }
         WebElement element = null;
         try {

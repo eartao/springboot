@@ -33,7 +33,7 @@ public class MainController {
             return RestResponse.fail("url cannt be null");
         }
         if(!url.contains("http")){
-            return RestResponse.fail("pls input correct url like this-->z`https://godaddy.com");
+            return RestResponse.fail("pls input correct url like this------>https://godaddy.com");
         }
         if(StringUtils.isBlank(pfId)){
             return RestResponse.fail("please choose a pfId");
