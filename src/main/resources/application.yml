@@ -17,3 +17,4 @@ server:
 #mybatis:
 #  mapper-locations: classpath:com/example/demo/mapper/*.xml
 #java -jar demo-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
+#java -jar demo-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
