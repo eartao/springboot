@@ -6,11 +6,7 @@ spring:
     suffix: .html
   datasource:
        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-       url: jdbc:sqlserver://P3TWSQL02\PSQL;Databasename=gdMasterCatalog
-       integratedSecurity: true
+       url: jdbc:sqlserver://P3TWSQL02\PSQL;databaseName=gdMasterCatalog;integratedSecurity=true;
 
-
-#       username: JOMAX\bzhang
-#       password: password
 server:
   port: 8080
