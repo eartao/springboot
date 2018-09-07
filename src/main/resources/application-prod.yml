@@ -9,4 +9,4 @@ spring:
        url: jdbc:sqlserver://P3TWSQL02\PSQL;databaseName=gdMasterCatalog;integratedSecurity=true;
 
 server:
-  port: 8080
+  port: 8081
