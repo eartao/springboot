@@ -68,20 +68,28 @@
                 resultButton: "比较结果",
                 datalist1: {},
                 click1: function(){
-                    $("#group1").removeAttr("hidden");
+                    $("#APAC").removeAttr("hidden");
                 },
                 click2: function(){
-                    $("#group2").removeAttr("hidden");
+                    $("#Canada").removeAttr("hidden");
                 },
                 click3: function(){
-                    $("#group3").removeAttr("hidden");
+                    $("#EMEA").removeAttr("hidden");
+                },
+                click4: function(){
+                    $("#LatAm").removeAttr("hidden");
+                },
+                click5: function(){
+                    $("#UnitedStates").removeAttr("hidden");
                 },
                 listXpath: "",
                 saleXpath: "",
                 market: [],
-                markets1:['en-US','en-AE','es-AR','fr-CA','de-CH','fr-CH','it-CH','es-CL','zh-Hans-CN','es-CO','cs-CZ','de-DE'],
-                markets2:['de-AT','en-AU','fr-BE','da-DK','ar-EG','en-EG','es-ES','fi-FI','fr-FR','el-GR','en-HK','hu-HU'],
-                markets3:['nl-BE','pt-BR','en-CA','en-ZA','en-US','vi-VN','es-VE','en-GB','uk-UA','zh-TW','tr-TR','en-GB'],
+                markets1:['en-AU','en-IN','en-PH','en-SG','zh-CN','zh-HK','en-HK','id-ID','ja-JP','ko-KR','th-TH','vi-VN','zh-SG','zh-TW','hi-IN','ta-IN','mr-IN','en-MY','en-NZ'],
+                markets2:['fr-CA','en-CA'],
+                markets3:['en-GB','en-ZA','es-ES','de-DE','fr-FR','it-IT','tr-TR','nl-NL','da-DK','fi-FI','el-GR','nb-NO','pl-PL','sv-SE','pt-PT','de-AT','fr-BE','de-CH','fr-CH','it-CH','nl-BE','uk-UA','en-AE','en-IL','en-PK','en-IE'],
+                markets4:['pt-BR','pt-BR','es-CL','es-CO','es-CO','es-MX','es-PE','es-VE'],
+                markets5:['es-US','en-US'],
                 result: function (){
                     $.ajax({
                         type:"post",
@@ -132,17 +140,27 @@
                 <ul class="dropdown-menu">
                     <li>
                         <!--<a href="#">Group1</a>-->
-                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click1">Group1</button>
+                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click1">APAC</button>
                     </li>
                     <li class="divider">
                     </li>
                     <li>
-                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click2">Group2</button>
+                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click2">Canada</button>
                     </li>
                     <li class="divider">
                     </li>
                     <li>
-                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click3">Group3</button>
+                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click3">EMEA</button>
+                    </li>
+                    <li class="divider">
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click4">LatAm</button>
+                    </li>
+                    <li class="divider">
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click5">United States</button>
                     </li>
                 </ul>
             </div>
@@ -152,29 +170,42 @@
             <!--<input ms-duplex="@market" type="checkbox"  id="6" class="awesome" /><label for="6">en-au</label>-->
             <!--<p>{{@market}}</p>-->
             <!--</div>-->
-            <div id="group1" hidden="hidden" class="col-md-12 column">
+            <div id="APAC" hidden="hidden" class="col-md-12 column">
                 <div>
+                    <!--<input type="checkbox" id="checkbox1" class="awesome"/>-->
+                    <!--<label for="checkbox1">AAAAAAAAAA</label>-->
                     <label ms-for="el in @markets1">
-                        <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
+                        <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market" />{{el}}
                     </label>
                 </div>
-                <br>
             </div>
-            <div id="group2" hidden="hidden" class="col-md-12 column">
+            <div id="Canada" hidden="hidden" class="col-md-12 column">
                 <div>
                     <label ms-for="el in @markets2">
                         <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
                     </label>
                 </div>
-                <br>
             </div>
-            <div id="group3" hidden="hidden" class="col-md-12 column">
+            <div id="EMEA" hidden="hidden" class="col-md-12 column">
                 <div>
                     <label ms-for="el in @markets3">
                         <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
                     </label>
                 </div>
-                <br>
+            </div>
+            <div id="LatAm" hidden="hidden" class="col-md-12 column">
+                <div>
+                    <label ms-for="el in @markets4">
+                        <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
+                    </label>
+                </div>
+            </div>
+            <div id="UnitedStates" hidden="hidden" class="col-md-12 column">
+                <div>
+                    <label ms-for="el in @markets5">
+                        <input type="checkbox" ms-attr="{value:el}" ms-duplex="@market"> {{el}}
+                    </label>
+                </div>
             </div>
             <div ms-controller="viewmodel">
                 <form role="form" class="form-inline">

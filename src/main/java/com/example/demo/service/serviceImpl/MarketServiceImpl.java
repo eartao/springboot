@@ -43,24 +43,7 @@ public class MarketServiceImpl implements MarketService {
 
     public static void main(String[] args) {
         String url = "https://godaddy.com/tlds/club-domain";
-        System.out.println(getUrl(url,"es-us"));
-        System.out.println(url.substring(url.indexOf(".com")+4));
-        System.out.println(String.format(url,"www"));
-        String market = "en-gb";
-        System.out.println(market.substring(3)+market.substring(0,2));
-        System.out.println("======"+getUrl(url,market));
-//        System.out.println(url.substring(0,8)+market.substring(3).toLowerCase()+"."+url.substring(8));
-//        System.out.println(market.toLowerCase());
-//        String money = "$money$ 5.   6大健康1,4  fdsaf2*/añomeiy你好uan";
-//        char[] chars = money.toCharArray();
-//        String result = "";
-//        for (int i = 0; i < chars.length; i++) {
-//            if (("0123456789.,").indexOf(chars[i] + "") != -1)
-//            {
-//                result += chars[i];
-//            }
-//        }
-//        System.out.println(result);
+        System.out.println(getUrl(url,"fr-BE"));
     }
 
     private static String getUrl(String url, String  market) {
@@ -70,7 +53,7 @@ public class MarketServiceImpl implements MarketService {
             if(market.equalsIgnoreCase("en-gb")){
                 url = url.replace("www","hk");
             } else if (market.equalsIgnoreCase("es-us")) {
-                url = url.replace("com/","com/"+text[0]+"/");
+                url = url.replace("com/","com/"+text[0].toLowerCase()+"/");
             } else if (market.equalsIgnoreCase("en-us")){
 
             } else {
@@ -79,17 +62,22 @@ public class MarketServiceImpl implements MarketService {
         } else {
             if (market.equalsIgnoreCase("en-us")){
                 url = url.substring(0,8)+"www."+url.substring(8);
-            }
-            else if (market.equalsIgnoreCase( "en-gb"))
-            {
+            } else if (market.equalsIgnoreCase( "en-gb")) {
                 url = url.substring(0,8)+"uk."+url.substring(8);
-            }
-            else if (market.equalsIgnoreCase("es-us"))
-            {
+            } else if (market.equalsIgnoreCase("es-us")) {
                 url = url.substring(0,8)+"www."+url.substring(8);
                 url = url.replace(".com/",".com/"+text[0]+"/");
-            }
-            else {
+            } else if (market.equalsIgnoreCase("en-IL") || market.equalsIgnoreCase("it-CH")
+                    || market.equalsIgnoreCase("fr-CH") || market.equalsIgnoreCase("fr-BE")
+                    || market.equalsIgnoreCase("fr-CA") || market.equalsIgnoreCase("mr-IN")
+                    || market.equalsIgnoreCase("ta-IN") || market.equalsIgnoreCase("hi-IN")
+                    || market.equalsIgnoreCase("en-HK") || market.equalsIgnoreCase("zh-SG")){
+                url = url.substring(0,8)+text[1].toLowerCase()+"."+url.substring(8);
+                url = url.replace(".com/",".com/"+text[0].toLowerCase()+"/");
+            } else if (market.equalsIgnoreCase("zh-CN")){
+                url = url.substring(0,8)+"sg."+url.substring(8);
+                url = url.replace(".com/",".com/"+text[0]+"/");
+            } else {
                 url = url.substring(0,8)+market.substring(3).toLowerCase()+"."+url.substring(8);
             }
         }
