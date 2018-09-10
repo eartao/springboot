@@ -51,19 +51,20 @@
                     url: "/getProductInfo",
                     success: function (data) {
                         $("#mask").hide();
-                        $('.btn-primary').removeClass("btn-primary").addClass("btn-success");
                         if(data.code==1){
                             win.alert("",data.message);
                             // alert(data.message);
                             return;
                         }
                         if(data.object.length==0){
+                            $('.btn-primary').removeClass("btn-primary").addClass("btn-danger");
                             viewmodel.text = "暂无数据";
                             // style="display: none"
                             $("#table1").attr("style","display: none");
                             viewmodel.datalist = data.object;
                             return;
                         }
+                            $('.btn-primary').removeClass("btn-primary").addClass("btn-success");
                             $("#table1").removeAttr("style");
                             $("#table1").removeAttr("hidden");
                             viewmodel.datalist = data.object;
