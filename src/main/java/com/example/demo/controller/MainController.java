@@ -23,6 +23,9 @@ public class MainController {
         if(StringUtils.isBlank(name)){
             return RestResponse.fail("please input product name");
         }
+        if(name.length()<=3){
+            return RestResponse.fail("please input at least 3 letter");
+        }
         RestResponse response = service.getProductInfo(name);
         return response;
     }
