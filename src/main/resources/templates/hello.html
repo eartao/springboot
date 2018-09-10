@@ -42,11 +42,15 @@
                 $("#h3").removeAttr("hidden");
             },
             request: function () {
+                $("#mask").css("height",$(document).height());
+                $("#mask").css("width",$(document).width());
+                $("#mask").show();
                 $.ajax({
                     type: "post",
                     data: {name: viewmodel.name},
                     url: "/getProductInfo",
                     success: function (data) {
+                        $("#mask").hide();
                         $('.btn-primary').removeClass("btn-primary").addClass("btn-success");
                         if(data.code==1){
                             win.alert("",data.message);
