@@ -19,6 +19,15 @@
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" th:href="@{/window.css}">
     <script src="/window.js"></script>
+
+    <style type="text/css">
+        .mask {
+                position: absolute; top: 0px; filter: alpha(opacity=60); background-color: #777;
+                z-index: 1002; left: 0px;
+                opacity:0.5; -moz-opacity:0.5;
+            }
+    </style>
+
     <script>
         var viewmodel = avalon.define({
             //id必须和页面上定义的ms-controller名字相同，否则无法控制页面
@@ -91,11 +100,15 @@
                 markets4:['pt-BR','pt-BR','es-CL','es-CO','es-CO','es-MX','es-PE','es-VE'],
                 markets5:['es-US','en-US'],
                 result: function (){
+                    $("#mask").css("height",$(document).height());
+                    $("#mask").css("width",$(document).width());
+                    $("#mask").show();
                     $.ajax({
                         type:"post",
                         data: {url: vm.url,pfId: viewmodel.pfId,markets:vm.market.toString(),listXpath:vm.listXpath,saleXpath:vm.saleXpath},
                         url:"/getResult",
                         success: function(data){
+                            $("#mask").hide();
                             if(data.code == 1){
                                 win.alert("",data.message);
                             } else {
@@ -125,6 +138,7 @@
         <!--Hello, <strong>tao!</strong>-->
     <!--</div>-->
 <!--</div>-->
+<div id="mask" class="mask">哈哈哈</div>
 <div class="container">
     <div class="row clearfix">
         <div class="col-md-12 column">
