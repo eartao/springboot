@@ -25,7 +25,7 @@
     on s.pf_id = l.pf_id and s.gdshop_currencyType = l.gdshop_currencyType
     left join catalog_countrySite c
     on s.gdshop_currencyType = c.defaultCurrencyType
-    where s.pf_id=#{pfId} and c.defaultMarketId=#{market}
+    where l.privateLabelResellerTypeID = 1 and s.pf_id=#{pfId} and c.defaultMarketId=#{market}
   </select>
 
   <insert id="insert" parameterType="com.example.demo.generator.pojo.CatalogProductprivatelabelpricesale">
