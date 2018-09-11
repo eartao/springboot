@@ -45,6 +45,7 @@ public class MainController {
         return response;
     }
 
+
     @RequestMapping("getPriceFromPage")
     public RestResponse getPriceFromPage(@RequestParam(required = true,value = "url")String url,@RequestParam(value = "markets") List<String> markets){
         if(StringUtils.isBlank(url)){
@@ -52,6 +53,10 @@ public class MainController {
         }
         //RestResponse response = service.getPriceFromPage(url);
         return null;
+    }
+
+    public static void main(String[] args) {
+        
     }
 
 
