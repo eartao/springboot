@@ -1,28 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Price Check Tool</title>
+    <!--<script src="/webjars/jquery/3.1.1/jquery.min.js"></script>-->
+    <!--<script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>-->
+    <!--<title>WebJars Demo</title>-->
+    <!--<link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />-->
     <script src="/webjars/jquery/jquery.min.js"></script>
-    <script>
-        function get(){
-        alert(2314);
-        alert($("#name").val());
-            var name = $("#name").val();
-            $.ajax({
-                url:"/getProductInfo",
-                type:"get",
-                data:{name:name},
-                success:function(data){
-                    alert("成功");
-                }
-            });
+    <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <!--<link href="https://cdn.bootcss.com/avalon.js/2.0s/avalon.js" rel="stylesheet">-->
+    <script src="https://cdn.bootcss.com/avalon.js/2.0s/avalon.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
         }
-
+        #wrap{
+            margin-left: 100px;
+        }
+        #wrap li{
+            display: inline-block;
+            *display: inline;
+            zoom:1;
+            vertical-align: middle;
+        }
+    </style>
+    <script type="text/javascript">
+    var duplex=avalon.define({
+        $id: "duplex",
+        selected=[],
+        list=[{id:1,text:'aaa'},{id:2,text:'bbb'},{id:3,text:'ccc'},{id:4,text:'ddd'},{id:5,text:'eee'},{id:6,text:'fff'}],
+        select_all_cb: function(){
+            var list=duplex.list,selected=duplex.selected;
+                if(this.checked){
+                    avalon.each(list,function(i,v){//循环保存着已经勾选选框的数据
+                        selected.ensure(v['id']);//如果里面没有当前选框的数据，就保存
+                    });
+                }else
+                    selected.clear();//清空
+        },
+        select_all:0
+    });
+    <!--require('avalon',function(avalon){-->
+        <!--var duplex=avalon.define('duplex',function(vm){-->
+            <!--vm.selected=[];//保存勾选的选项的id,方便传给后台-->
+            <!--vm.list=[{id:1,text:'aaa'},{id:2,text:'bbb'},{id:3,text:'ccc'},{id:4,text:'ddd'},{id:5,text:'eee'},{id:6,text:'fff'}];-->
+            <!--vm.select_all_cb=function(){//全选框change事件回调-->
+                <!--var list=duplex.list,selected=duplex.selected;-->
+                <!--if(this.checked){-->
+                    <!--avalon.each(list,function(i,v){//循环保存着已经勾选选框的数据-->
+                        <!--selected.ensure(v['id']);//如果里面没有当前选框的数据，就保存-->
+                    <!--});-->
+                <!--}else-->
+                    <!--selected.clear();//清空-->
+            <!--};-->
+            <!--vm.select_all=0;-->
+        <!--});-->
+        <!--duplex.selected.$watch('length',function(after){//监听保存数据数组的变化-->
+            <!--var len=duplex.list.length;-->
+            <!--if(after==len)//子选框全部被勾选-->
+                <!--duplex.select_all=1;-->
+            <!--else//子选框有一个没有被勾选-->
+                <!--duplex.select_all=0;-->
+        <!--});-->
+        <!--avalon.scan();-->
+    <!--});-->
     </script>
 </head>
 <body>
-<input type="text" name="product" id="name"/>
-<button onclick="get()">按钮</button>
+<div id='wrap' ms-controller='duplex'>
+    <p><input type='checkbox' data-duplex-changed="select_all_cb" ms-duplex-checked='select_all'>全选</p>
+    <ul>
+        <li ms-repeat='list'>
+            <input type='checkbox' ms-duplex-number="selected" ms-attr-value='el.id'>{{el.text}}
+        </li>
+    </ul>
+    <p>选中项的id:{{selected}}</p>
+</div>
 </body>
 </html>

@@ -27,6 +27,13 @@
                 opacity:0.5; -moz-opacity:0.5;
             }
     </style>
+    <script>
+        function deleInput(obj){
+            var id = obj.id;
+            $("#"+id).remove();
+            vm.globleId--;
+        }
+    </script>
 
     <script>
         var viewmodel = avalon.define({
@@ -36,7 +43,7 @@
             c:"",
             datalist: {},
             pfId:"",
-            text: "请求数据",
+            text: "GET",
             trClick: function(obj){
                 viewmodel.pfId = obj.pfId;
                 $("#h3").removeAttr("hidden");
@@ -58,7 +65,7 @@
                         }
                         if(data.object.length==0){
                             $('.btn-primary').removeClass("btn-primary").addClass("btn-danger");
-                            viewmodel.text = "暂无数据";
+                            viewmodel.text = "Nothing!";
                             // style="display: none"
                             $("#table1").attr("style","display: none");
                             viewmodel.datalist = data.object;
@@ -68,7 +75,7 @@
                             $("#table1").removeAttr("style");
                             $("#table1").removeAttr("hidden");
                             viewmodel.datalist = data.object;
-                            viewmodel.text = "数据请求成功，已渲染";
+                            viewmodel.text = "SUCCESS";
 
                     }
                 });
@@ -79,8 +86,9 @@
             var vm = avalon.define({
                 $id: "result",
                 url: "https://godaddy.com/",
-                resultButton: "比较结果",
+                resultButton: "RESULT",
                 datalist1: {},
+                globleId: 0,
                 click1: function(){
                     $("#APAC").removeAttr("hidden");
                 },
@@ -96,6 +104,46 @@
                 click5: function(){
                     $("#UnitedStates").removeAttr("hidden");
                 },
+                <!--removeInput: function(){-->
+                    <!--alert(vm.globleId);-->
+                    <!--var div = "div"+vm.globleId;-->
+                    <!--alert(div);-->
+                    <!--$("#"+div).remove();-->
+                    <!--vm.globleId&#45;&#45;;-->
+                <!--},-->
+                addInput: function(){
+                    var globleId = vm.globleId+1;
+                    var div = "div"+globleId;
+                    $("#baseDiv").append("<div onclick=\"deleInput(this)\" id="+div+">\n" +
+                "                            <label>Page&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>\n" +
+                "                            <input ms-duplex=\"@url\"    type=\"url\" class=\"form-control\"  style=\"width: 455px\"/><br>\n" +
+                "                            <label>saleXpath&nbsp;</label>\n" +
+                "                            <input ms-duplex=\"@saleXpath\"    type=\"url\" class=\"form-control\"  style=\"width: 750px\"/><br>\n" +
+                "                            <label>listXpath&nbsp;&nbsp;</label>\n" +
+                "                            <input ms-duplex=\"@listXpath\"    type=\"url\" class=\"form-control\"  style=\"width: 750px\"/>\n" +
+                "                            <button type=\"button\" class=\"btn btn-danger\" style=\"margin: 10px;\" >X</button>\n" +
+                "                    </div>");
+
+
+                <!--$("#baseDiv").append("<div id = "+div+"\n" +-->
+                <!--"                    <div>\n" +-->
+                <!--"                        <label>Page&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>\n" +-->
+                <!--"                        <input ms-duplex=\"@url\"    type=\"url\" class=\"form-control\"  style=\"width: 455px\"/>\n" +-->
+                <!--"                    </div>\n" +-->
+                <!--"                    <div>\n" +-->
+                <!--"                        <label>saleXpath&nbsp;</label>\n" +-->
+                <!--"                        <input ms-duplex=\"@saleXpath\"    type=\"url\" class=\"form-control\"  style=\"width: 750px\"/>\n" +-->
+                <!--"                    </div>\n" +-->
+                <!--"                    <div>\n" +-->
+                <!--"                        <label>listXpath&nbsp;&nbsp;</label>\n" +-->
+                <!--"                        <input ms-duplex=\"@listXpath\"    type=\"url\" class=\"form-control\"  style=\"width: 750px\"/>\n" +-->
+                <!--"                        <button type=\"button\" class=\"btn btn-danger\" style=\"margin: 10px;\" ms-click=\"@removeInput\">X</button>\n" +-->
+                <!--"                    </div>\n" +-->
+                <!--"                </div>");-->
+
+
+                vm.globleId = vm.globleId+1;
+                },
                 listXpath: "",
                 saleXpath: "",
                 market: [],
@@ -104,6 +152,26 @@
                 markets3:['en-GB','en-ZA','es-ES','de-DE','fr-FR','it-IT','tr-TR','nl-NL','da-DK','fi-FI','el-GR','nb-NO','pl-PL','sv-SE','pt-PT','de-AT','fr-BE','de-CH','fr-CH','it-CH','nl-BE','uk-UA','en-AE','en-IL','en-PK','en-IE'],
                 markets4:['pt-BR','pt-BR','es-CL','es-CO','es-CO','es-MX','es-PE','es-VE'],
                 markets5:['es-US','en-US'],
+                select_all_cb: function(){
+                    var list = vm.markets1;
+                    var mar = vm.market;
+                    alert(list);
+                    alert(mar);
+                    alert(this.checked);
+                    if(this.checked){
+                        alert("if");
+                        avalon.each(list,function(i,v){//循环保存着已经勾选选框的数据
+                            mar.ensure(v);//如果里面没有当前选框的数据，就保存
+                        });
+                    } else{
+                        alert("else");
+                        avalon.each(list,function(i,v){//循环保存着已经勾选选框的数据
+                            mar.ensure(v);//如果里面没有当前选框的数据，就保存
+                        });
+                        alert(mar);
+                        <!--mar.clear();//清空-->
+                    }
+                },
                 result: function (){
                     $("#mask").css("height",$(document).height());
                     $("#mask").css("width",$(document).width());
@@ -156,10 +224,12 @@
             <!--</div>-->
             <div class="btn-group">
                 <button class="btn btn-default">Markets</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+                <input type="checkbox" id="allMarket"  class="awesome"/><label for="allMarket">All</label>
                 <ul class="dropdown-menu">
                     <li>
                         <!--<a href="#">Group1</a>-->
                         <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click1">APAC</button>
+                        <input type='checkbox' ms-click="@select_all_cb" >全选
                     </li>
                     <li class="divider">
                     </li>
@@ -231,21 +301,24 @@
                     <div>
                         <label>product name&nbsp;</label>
                         <input ms-duplex="@name" type="text"  class="form-control" style="width: 425px"/>
-                        <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@request">{{@text}}</button>
+                        <button type="button" class="btn btn-primary" style="margin: 1px;" ms-click="@request">{{@text}}</button>
                     </div>
-                    <div>
-                        <label>url address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <input ms-duplex="@url"    type="url" class="form-control"  style="width: 425px"/>
-                        <!--<button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@result">{{@resultButton}}</button>-->
-                    </div>
-                    <div>
-                        <label>saleXpath&nbsp;</label>
-                        <input ms-duplex="@saleXpath"    type="url" class="form-control"  style="width: 750px"/>
-                    </div>
-                    <div>
-                        <label>listXpath&nbsp;&nbsp;</label>
-                        <input ms-duplex="@listXpath"    type="url" class="form-control"  style="width: 750px"/>
-                        <button type="button" class="btn btn-success" style="margin: 10px;" ms-click="@result">{{@resultButton}}</button>
+                    <div  id="baseDiv">
+                        <div>
+                            <label>Page&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <input ms-duplex="@url"    type="url" class="form-control"  style="width: 455px"/>
+                            <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@addInput">+</button>
+                            <button type="button" class="btn btn-danger" style="margin: 10px;" ms-click="@removeInput">X</button>
+                            <button type="button" class="btn btn-success" style="margin: 1px;" ms-click="@result">{{@resultButton}}</button>
+                        </div>
+                        <div>
+                            <label>saleXpath&nbsp;</label>
+                            <input ms-duplex="@saleXpath"    type="url" class="form-control"  style="width: 750px"/>
+                        </div>
+                        <div>
+                            <label>listXpath&nbsp;&nbsp;</label>
+                            <input ms-duplex="@listXpath"    type="url" class="form-control"  style="width: 750px"/>
+                        </div>
                     </div>
                     <div>
                         <h2 style="color:red" hidden="hidden" id="h3">pfId:{{@pfId}}   market：{{@market}}</h2>
