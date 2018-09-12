@@ -23,7 +23,7 @@ public class MainController {
         if(StringUtils.isBlank(name)){
             return RestResponse.fail("please input product name");
         }
-        if(name.length()<=3){
+        if(name.length()<=2){
             return RestResponse.fail("please input at least 3 letter");
         }
         RestResponse response = service.getProductInfo(name);
@@ -32,6 +32,9 @@ public class MainController {
 
     @RequestMapping("getResult")
     public RestResponse getResult(String url,String markets,String  pfId,String listXpath,String saleXpath){
+        System.out.println("url:"+url);
+        System.out.println("listXpath:"+listXpath);
+        System.out.println("saleXpath:"+saleXpath);
         if(StringUtils.isBlank(url)){
             return RestResponse.fail("url cannt be null");
         }

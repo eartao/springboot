@@ -115,8 +115,11 @@ public class MarketServiceImpl implements MarketService {
             }
             List<ProductPrice> list = new ArrayList<>();
             List<Result> results = new ArrayList<>();
-            Map<String,String> map = new HashMap<>();
+            Map<String,String> mybatisMap = new HashMap<>();
+            List<Map<String,String>> returnList = new ArrayList<>();
             for (int i = 0; i < market.length; i++) {
+                Map<String,String> returnMap = new HashMap<>();
+                returnMap.put("market",market[i]);
                 Result result = new Result();
                 ProductPrice pagePrice = new ProductPrice();
                 ProductPrice sqlPrice = new ProductPrice();
@@ -126,6 +129,8 @@ public class MarketServiceImpl implements MarketService {
                 pagePrice = getPagePrice(market[i],useUrl,listXpath,saleXpath);
                 System.out.println("============="+pagePrice);
                 if(StringUtils.isBlank(pagePrice.getSalePrice())){
+                    returnMap.put("pageSalePrice","Map No Price");
+                    returnList.add(returnMap);
                     result.setPageSalePrice("No Price");
                     results.add(result);
                     continue;
@@ -133,9 +138,9 @@ public class MarketServiceImpl implements MarketService {
                 result.setPageSalePrice(null == pagePrice ? null : getMoney(pagePrice.getSalePrice()));
                 result.setPageListPrice(null == pagePrice ? null : getMoney(pagePrice.getListPrice()));
 
-                map.put("market",market[i]);
-                map.put("pfId",pfId);
-                sqlPrice = saleMapper.getPriceFromSql(map);
+                mybatisMap.put("market",market[i]);
+                mybatisMap.put("pfId",pfId);
+                sqlPrice = saleMapper.getPriceFromSql(mybatisMap);
                 System.out.println("============="+sqlPrice);
                 System.out.println(pagePrice.equals(sqlPrice));
                 result.setSqlSalePrice(null == sqlPrice ? null : sqlPrice.getSalePrice());
@@ -148,7 +153,7 @@ public class MarketServiceImpl implements MarketService {
                 System.out.println(result.toString());
                 results.add(result);
             }
-            return RestResponse.success(results);
+            return RestResponse.success(returnList);
         } catch (Exception e) {
             e.printStackTrace();
             return RestResponse.fail("系统异常，请联系管理员");

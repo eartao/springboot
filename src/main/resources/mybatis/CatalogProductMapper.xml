@@ -45,7 +45,8 @@
     select
     <include refid="Base_Column_List" />
     from catalog_product
-    where name like '%'+#{name}+'%'
+    <!--where name like '%'+#{name}+'%'-->
+    where name like "%"#{name}"%"
   </select>
 
   <insert id="insert" parameterType="com.example.demo.generator.pojo.CatalogProduct">

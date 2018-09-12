@@ -11,6 +11,7 @@
     <!--<title>WebJars Demo</title>-->
     <!--<link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />-->
     <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <!--<link href="https://cdn.bootcss.com/avalon.js/2.0s/avalon.js" rel="stylesheet">-->
@@ -31,7 +32,7 @@
         function deleInput(obj){
             var id = obj.id;
             $("#"+id).remove();
-            vm.globleId--;
+            <!--vm.globleId&#45;&#45;;-->
         }
     </script>
 
@@ -114,16 +115,16 @@
                 addInput: function(){
                     var globleId = vm.globleId+1;
                     var div = "div"+globleId;
-                    $("#baseDiv").append("<div id="+div+"  ms-controller=\"aa\">\n" +
-                "                            <label>Page&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>\n" +
-                "                            <input ms-duplex=\"@url\"    type=\"url\" class=\"form-control\"  style=\"width: 455px\"/><br>\n" +
-                "                            <label>saleXpath&nbsp;</label>\n" +
-                "                            <input ms-duplex=\"@saleXpath\"    type=\"url\" class=\"form-control\"  style=\"width: 750px\"/><br>\n" +
-                "                            <label>listXpath&nbsp;&nbsp;</label>\n" +
-                "                            <input ms-duplex=\"@listXpath\"    type=\"url\" class=\"form-control\"  style=\"width: 750px\"/>\n" +
+                     <!--ms-controller=\"aa\"-->
+                    $("#baseDiv").append("<div id="+div+" >\n" +
+                "                            <label>Page"+globleId+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>\n" +
+                "                            <input ms-duplex=\"@url\" name=\"url\"    type=\"url\" class=\"form-control\"  style=\"width: 455px\"/><br>\n" +
+                "                            <label>saleXpath"+globleId+"&nbsp;</label>\n" +
+                "                            <input ms-duplex=\"@saleXpath\" name=\"saleXpath\"   type=\"url\" class=\"form-control\"  style=\"width: 750px\"/><br>\n" +
+                "                            <label>listXpath"+globleId+"&nbsp;&nbsp;</label>\n" +
+                "                            <input ms-duplex=\"@listXpath\"  name=\"listXpath\"   type=\"url\" class=\"form-control\"  style=\"width: 750px\"/>\n" +
                 "                            <button type=\"button\" class=\"btn btn-danger\" style=\"margin: 10px;\" onclick=\"deleInput(this)\" id="+div+">X</button>\n" +
                 "                    </div>");
-                avalon.scan($("#"+div).get(vm.globleId));
                 vm.globleId = vm.globleId+1;
 
                 },
@@ -156,14 +157,37 @@
                     }
                 },
                 result: function (){
-                    $("#mask").css("height",$(document).height());
-                    $("#mask").css("width",$(document).width());
-                    $("#mask").show();
-                    $.ajax({
-                        type:"post",
-                        data: {url: vm.url,pfId: viewmodel.pfId,markets:vm.market.toString(),listXpath:vm.listXpath,saleXpath:vm.saleXpath},
-                        url:"/getResult",
-                        success: function(data){
+                    alert("test");
+                    <!--$("#mask").css("height",$(document).height());-->
+                    <!--$("#mask").css("width",$(document).width());-->
+                    <!--$("#mask").show();-->
+                    <!--$.ajax({-->
+                        <!--type:"post",-->
+                        <!--data: {url: vm.url,pfId: viewmodel.pfId,markets:vm.market.toString(),listXpath:vm.listXpath,saleXpath:vm.saleXpath},-->
+                        <!--url:"/getResult",-->
+                        <!--success: function(data){-->
+                            <!--$("#mask").hide();-->
+                            <!--if(data.code == 1){-->
+                                <!--win.alert("",data.message);-->
+                            <!--} else {-->
+                                <!--$("#table1").attr("hidden", "hidden");-->
+                                <!--$("#table2").removeAttr("hidden");-->
+                                <!--vm.datalist1 = data.object;-->
+                            <!--}-->
+                        <!--}-->
+                    <!--});-->
+                }
+            })
+    </script>
+
+    <script>
+        function ajaxForm(){
+            var options = {
+              type: 'post',
+              dataType: 'json',
+              url:  "/getResult",
+              data: {pfId: viewmodel.pfId,markets:vm.market.toString()},
+              success: function(data){
                             $("#mask").hide();
                             if(data.code == 1){
                                 win.alert("",data.message);
@@ -173,18 +197,23 @@
                                 vm.datalist1 = data.object;
                             }
                         }
-                    });
-                }
-            })
-    </script>
+            };
+            $("#mask").css("height",$(document).height());
+                    $("#mask").css("width",$(document).width());
+                    $("#mask").show();
+            $("#ajaxForm").ajaxSubmit(options);
+        }
 
-    <script>
-        var aa = avalon.define({
-          $id:'aa',
-          url: "aaaaa",
-          saleXpath: "xxxxxxxxx",
-          listXpath: "xxdfadf"
-        })
+        <!--var options = {-->
+          <!--type: 'post',-->
+          <!--dataType: 'json',  url:  s.update_contact_path-->
+        <!--};-->
+
+        <!--$("#ajaxForm").submit(function() {-->
+          <!--alert("ajax提交方式");-->
+          <!--$(this).ajaxSubmit(options);-->
+          <!--return false;-->
+        <!--});-->
     </script>
 </head>
 
@@ -208,12 +237,12 @@
             <!--</div>-->
             <div class="btn-group">
                 <button class="btn btn-default">Markets</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
-                <input type="checkbox" id="allMarket"  class="awesome"/><label for="allMarket">All</label>
+                <!--<input type="checkbox" id="allMarket"  class="awesome"/><label for="allMarket">All</label>-->
                 <ul class="dropdown-menu">
                     <li>
                         <!--<a href="#">Group1</a>-->
                         <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@click1">APAC</button>
-                        <input type='checkbox' ms-click="@select_all_cb" >全选
+                        <!--<input type='checkbox' ms-click="@select_all_cb" >全选-->
                     </li>
                     <li class="divider">
                     </li>
@@ -281,7 +310,7 @@
                 </div>
             </div>
             <div ms-controller="viewmodel">
-                <form role="form" class="form-inline">
+                <form role="form" class="form-inline" id="ajaxForm">
                     <div>
                         <label>product name&nbsp;</label>
                         <input ms-duplex="@name" type="text"  class="form-control" style="width: 425px"/>
@@ -290,21 +319,21 @@
                     <div  id="baseDiv" ms-controller="appendMs">
                         <div>
                             <label>Page&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                            <input ms-duplex="@url"    type="url" class="form-control"  style="width: 455px"/>
+                            <input ms-duplex="@url" name="url"    type="url" class="form-control"  style="width: 455px"/>
                             <button type="button" class="btn btn-primary" style="margin: 10px;" ms-click="@addInput">+</button>
                             <!--<button type="button" class="btn btn-danger" style="margin: 10px;" ms-click="@removeInput">X</button>-->
-                            <button type="button" class="btn btn-success" style="margin: 1px;" ms-click="@result">{{@resultButton}}</button>
+                            <!--<button type="button" class="btn btn-success" style="margin: 1px;"  ms-click="@result">{{@resultButton}}</button>-->
+                            <button type="button" class="btn btn-success" style="margin: 1px;" onclick="ajaxForm();" ms-click="@result">{{@resultButton}}</button>
                         </div>
                         <div>
                             <label>saleXpath&nbsp;</label>
-                            <input ms-duplex="@saleXpath"    type="url" class="form-control"  style="width: 750px"/>
+                            <input ms-duplex="@saleXpath" name="saleXpath"    type="url" class="form-control"  style="width: 750px"/>
                         </div>
                         <div>
                             <label>listXpath&nbsp;&nbsp;</label>
-                            <input ms-duplex="@listXpath"    type="url" class="form-control"  style="width: 750px"/>
+                            <input ms-duplex="@listXpath" name="listXpath"   type="url" class="form-control"  style="width: 750px"/>
                         </div>
                     </div>
-                    <p>{{@url}}</p>
                     <div>
                         <h2 style="color:red" hidden="hidden" id="h3">pfId:{{@pfId}}   market：{{@market}}</h2>
                     </div>
@@ -360,19 +389,21 @@
                         <thead>
                         <tr>
                             <td class="danger"><font size="3"><strong>Fail market</strong></font></td>
-                            <td class="danger"><font size="3"><strong>pageSalePrice</strong></font></td>
                             <td class="danger"><font size="3"><strong>sqlSalePrice</strong></font></td>
-                            <td class="danger"><font size="3"><strong>pageListPrice</strong></font></td>
                             <td class="danger"><font size="3"><strong>sqlListPrice</strong></font></td>
+                            <td class="danger"><font size="3"><strong>pageSalePrice</strong></font></td>
+                            <td class="danger"><font size="3"><strong>pageListPrice</strong></font></td>
+
                         </tr>
                         </thead>
                         <tbody>
                         <tr ms-for="el in @datalist1">
                             <td class="danger">{{el.market}}</td>
-                            <td class="danger">{{el.pageSalePrice}}</td>
                             <td class="danger">{{el.sqlSalePrice}}</td>
-                            <td class="danger">{{el.pageListPrice}}</td>
                             <td class="danger">{{el.sqlListPrice}}</td>
+                            <td class="danger">{{el.pageSalePrice}}</td>
+                            <td class="danger">{{el.pageListPrice}}</td>
+
                         </tr>
                         </tbody>
                     </table>
@@ -380,12 +411,6 @@
 
             </form>
 
-
-            <blockquote>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
-                </p> <small>Someone famous <cite>Source Title</cite></small>
-            </blockquote>
             <h4 class="text-center">
                 <small><cite>Please contact the administrator if you have any questions</cite></small>
             </h4>
