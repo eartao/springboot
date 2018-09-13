@@ -10,10 +10,16 @@
     <!--<script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>-->
     <!--<title>WebJars Demo</title>-->
     <!--<link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />-->
+
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
+
     <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
+
+    <link href="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+
     <!--<link href="https://cdn.bootcss.com/avalon.js/2.0s/avalon.js" rel="stylesheet">-->
     <script src="https://cdn.bootcss.com/avalon.js/2.0s/avalon.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
@@ -32,6 +38,7 @@
         function deleInput(obj){
             var id = obj.id;
             $("#"+id).remove();
+            vm.globle--;
             <!--vm.globleId&#45;&#45;;-->
         }
     </script>
@@ -90,6 +97,7 @@
                 resultButton: "RESULT",
                 datalist1: {},
                 globleId: 0,
+                globle: 0,
                 click1: function(){
                     $("#APAC").removeAttr("hidden");
                 },
@@ -126,6 +134,7 @@
                 "                            <button type=\"button\" class=\"btn btn-danger\" style=\"margin: 10px;\" onclick=\"deleInput(this)\" id="+div+">X</button>\n" +
                 "                    </div>");
                 vm.globleId = vm.globleId+1;
+                vm.globle = vm.globle + 1;
 
                 },
                 listXpath: "",
@@ -157,7 +166,10 @@
                     }
                 },
                 result: function (){
-                    alert("test");
+                    <!--alert("动态添加表头");-->
+                    <!--for(int i = 1; i<= vm.globle; i++){-->
+
+                    <!--}-->
                     <!--$("#mask").css("height",$(document).height());-->
                     <!--$("#mask").css("width",$(document).width());-->
                     <!--$("#mask").show();-->
@@ -194,7 +206,17 @@
                             } else {
                                 $("#table1").attr("hidden", "hidden");
                                 $("#table2").removeAttr("hidden");
-                                vm.datalist1 = data.object;
+                                <!--vm.datalist1 = data.object;-->
+
+                                var formdata='[{"number":1,"title":"4403070060020100016000007","groupNames":"龙岗区-龙岗街道-龙岗社区-龙岗01","status":"未完成"},{"number":2,"title":"4403070060020100016000008","groupNames":"龙岗区-龙岗街道-龙岗社区-龙岗01","status":"未完成"}]';
+                                var msg = data.object;
+                                alert(data.object);
+                                var formData = JSON.parse(formdata);
+                                $("#table2").bootstrapTable({
+                                    columns: msg   ,//动态取标题
+                                    data:formData
+                                });
+
                             }
                         }
             };
@@ -386,26 +408,26 @@
             <form role="form" class="form-inline">
                 <div class="col-md-12 column">
                     <table class="table table-striped" id="table2" hidden="hidden">
-                        <thead>
-                        <tr>
-                            <td class="danger"><font size="3"><strong>Fail market</strong></font></td>
-                            <td class="danger"><font size="3"><strong>sqlSalePrice</strong></font></td>
-                            <td class="danger"><font size="3"><strong>sqlListPrice</strong></font></td>
-                            <td class="danger"><font size="3"><strong>pageSalePrice</strong></font></td>
-                            <td class="danger"><font size="3"><strong>pageListPrice</strong></font></td>
+                        <!--<thead>-->
+                        <!--<tr id="trId">-->
+                            <!--<td class="danger"><font size="3"><strong>Fail market</strong></font></td>-->
+                            <!--<td class="danger"><font size="3"><strong>sqlSalePrice</strong></font></td>-->
+                            <!--<td class="danger"><font size="3"><strong>sqlListPrice</strong></font></td>-->
+                            <!--<td class="danger"><font size="3"><strong>pageSalePrice</strong></font></td>-->
+                            <!--<td class="danger"><font size="3"><strong>pageListPrice</strong></font></td>-->
 
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ms-for="el in @datalist1">
-                            <td class="danger">{{el.market}}</td>
-                            <td class="danger">{{el.sqlSalePrice}}</td>
-                            <td class="danger">{{el.sqlListPrice}}</td>
-                            <td class="danger">{{el.pageSalePrice}}</td>
-                            <td class="danger">{{el.pageListPrice}}</td>
+                        <!--</tr>-->
+                        <!--</thead>-->
+                        <!--<tbody>-->
+                        <!--<tr ms-for="el in @datalist1">-->
+                            <!--<td class="danger">{{el.market}}</td>-->
+                            <!--<td class="danger">{{el.sqlSalePrice}}</td>-->
+                            <!--<td class="danger">{{el.sqlListPrice}}</td>-->
+                            <!--<td class="danger">{{el.pageSalePrice}}</td>-->
+                            <!--<td class="danger">{{el.pageListPrice}}</td>-->
 
-                        </tr>
-                        </tbody>
+                        <!--</tr>-->
+                        <!--</tbody>-->
                     </table>
                 </div>
 
